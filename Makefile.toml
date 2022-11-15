@@ -1,0 +1,53 @@
+[config]
+skip_core_tasks = true
+
+[tasks.ci]
+description = "download frontend dependencies"
+category = "Build"
+cwd = "web"
+command = "npm.cmd"
+args = ["ci"]
+
+[tasks.web]
+description = "build frontend"
+category = "Build"
+cwd = "web"
+dependencies = ["ci"]
+command = "npm.cmd"
+args = ["run","build"]
+
+[tasks.default]
+description = "build backend"
+category = "Build"
+dependencies = ["web"]
+command = "cargo"
+args = ["run"]
+
+[tasks.build]
+description = "build backend"
+category = "Build"
+dependencies = ["web"]
+command = "cargo"
+args = ["build"]
+
+[tasks.release]
+description = "Release backend"
+category = "Build"
+dependencies = ["web"]
+command = "cargo"
+args = ["build", "--release"]
+
+[tasks.cleanfrontend]
+description = "clean frontend"
+category = "Build"
+cwd = "web"
+dependencies = ["ci"]
+command = "npm.cmd"
+args = ["run", "clean"]
+
+[tasks.clean]
+description = "clean backend"
+category = "Build"
+dependencies = ["cleanfrontend"]
+command = "cargo"
+args = ["clean"]
